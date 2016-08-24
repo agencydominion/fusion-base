@@ -16,6 +16,9 @@ add_theme_support( 'custom-background' );
 //automatic feed links support
 add_theme_support( 'automatic-feed-links' );
 
+//selective refresh for widgets in the customizer
+add_theme_support( 'customize-selective-refresh-widgets' );
+
 //define content width
 if ( ! isset( $content_width ) ) {
 	$content_width = 2560;
