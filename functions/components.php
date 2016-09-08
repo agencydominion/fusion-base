@@ -16,6 +16,10 @@ function fsn_base_layout_admin_scripts($hook) {
 		wp_enqueue_script( 'chosen' );
 		wp_enqueue_style( 'chosen' );
 		wp_enqueue_script('fsn_base_components_admin', get_template_directory_uri() . '/js/fsn-base-components-admin.js', array( 'jquery','jquery-ui-autocomplete','jquery-ui-sortable'));
+		wp_localize_script( 'fsn_base_components_admin', 'fsnBaseJS', array(
+				'fsnEditLayoutNonce' => wp_create_nonce('fsn-admin-edit-layout')
+			)
+		);
 	}
 }
 
@@ -183,6 +187,13 @@ function fsn_base_layout_builder_output() {
 //add list items via AJAX
 add_action('wp_ajax_fsn_base_add_list_item_layout', 'fsn_base_list_builder_add_item');
 function fsn_base_list_builder_add_item() {
+	//verify nonce
+	check_ajax_referer( 'fsn-admin-edit-layout', 'security' );
+	
+	//verify capabilities
+	if ( !current_user_can( 'edit_theme_options' ) )
+		die( '-1' );
+	
 	$list_item_id = intval( $_POST['item_id'] );
 	$list_item = get_post($list_item_id);
 	echo '<div class="list-item">';		

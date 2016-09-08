@@ -13,9 +13,14 @@ jQuery(document).ready(function() {
 		var selectedID = jQuery(this).val();		
 		var data = {
 			action: 'fsn_base_add_list_item_layout',
-			item_id: selectedID
+			item_id: selectedID,
+			security: fsnBaseJS.fsnEditLayoutNonce
 		};	
 		jQuery.post(ajaxurl, data, function(response) {
+			if (response == '-1') {
+				alert('Oops, something went wrong. Please reload the page and try again.');
+				return false;
+			}
 			listItemsContainer.append(response);
 			itemSelectElement.val('');
 			adupdateListNumbers();
