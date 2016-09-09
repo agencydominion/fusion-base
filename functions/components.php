@@ -194,7 +194,7 @@ function fsn_base_list_builder_add_item() {
 	if ( !current_user_can( 'edit_theme_options' ) )
 		die( '-1' );
 	
-	$list_item_id = intval( $_POST['item_id'] );
+	$list_item_id = intval($_POST['item_id']);
 	$list_item = get_post($list_item_id);
 	echo '<div class="list-item">';		
 		echo '<div class="list-item-details">';
