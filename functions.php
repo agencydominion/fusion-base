@@ -249,7 +249,7 @@ if (!function_exists('fsn_pagination')) {
  */
  
 if (!function_exists('fsn_get_post_meta')) {
-	function fsn_base_get_post_meta($args) {
+	function fsn_base_get_post_meta($args = false) {
 		global $post;
 		
 		$defaults = array(
