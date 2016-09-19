@@ -128,7 +128,7 @@ function fsn_base_layout_builder_output() {
     	if ( !empty($fsn_base_list_items) ) {
     		$i = 0;
     		foreach($fsn_base_list_items as $fsn_base_list_item) {
-    			if ($fsn_base_list_item[item_id] == 'divider') {
+    			if ($fsn_base_list_item['item_id'] == 'divider') {
     				$item_class = 'list-item content-item';
     				$item_title = 'Page Content';
     				$item_value = 'divider';
