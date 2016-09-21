@@ -62,10 +62,10 @@ function adupdateListNumbers() {
 
 //init select2 fields
 jQuery(document).ready(function() {
-	initSelect2Fields();
+	fsnBaseInitPostSelect();
 });
 
-function initSelect2Fields() {
+function fsnBaseInitPostSelect() {
 	var select2Elements = jQuery('.select2-posts-element');
 	select2Elements.each(function() {
 		var select2Element = jQuery(this);
