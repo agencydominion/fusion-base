@@ -17,7 +17,8 @@ function fsn_base_layout_admin_scripts($hook) {
 		wp_enqueue_style( 'select2' );
 		wp_enqueue_script('fsn_base_components_admin', get_template_directory_uri() . '/js/fsn-base-components-admin.js', array( 'jquery','jquery-ui-autocomplete','jquery-ui-sortable'));
 		wp_localize_script( 'fsn_base_components_admin', 'fsnBaseJS', array(
-				'fsnEditLayoutNonce' => wp_create_nonce('fsn-admin-edit-layout')
+				'fsnEditLayoutNonce' => wp_create_nonce('fsn-admin-edit-layout'),
+				'fsnEditNonce' => wp_create_nonce('fsn-admin-edit')
 			)
 		);
 	}

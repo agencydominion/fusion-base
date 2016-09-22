@@ -81,7 +81,8 @@ function fsnBaseInitPostSelect() {
 						q: params.term, // search term
 						page: params.page,
 						action: 'fsn_posts_search',
-						postType: postType
+						postType: postType,
+						security: fsnBaseJS.fsnEditNonce
 					};
 			    },
 			    processResults: function (data, params) {
