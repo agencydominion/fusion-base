@@ -69,6 +69,7 @@ function fsnBaseInitPostSelect() {
 	var select2Elements = jQuery('.select2-posts-element');
 	select2Elements.each(function() {
 		var select2Element = jQuery(this);
+		var postsPerPage = 30;
 		var postType  = select2Element.data('postType');
 		select2Element.select2({
 			ajax: {
@@ -81,6 +82,7 @@ function fsnBaseInitPostSelect() {
 						q: params.term, // search term
 						page: params.page,
 						action: 'fsn_posts_search',
+						posts_per_page: postsPerPage,
 						postType: postType,
 						security: fsnBaseJS.fsnEditNonce
 					};
@@ -90,7 +92,7 @@ function fsnBaseInitPostSelect() {
 					return {
 						results: data.items,
 						pagination: {
-							more: (params.page * 5) < data.total_count
+							more: (params.page * postsPerPage) < data.total_count
 						}
 					};
 				},
