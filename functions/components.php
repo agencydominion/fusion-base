@@ -13,11 +13,12 @@ function fsn_base_layout_add_page() {
 add_action('admin_enqueue_scripts', 'fsn_base_layout_admin_scripts');
 function fsn_base_layout_admin_scripts($hook) {
 	if ($hook == 'appearance_page_fsn_base_layout') {
-		wp_enqueue_script( 'chosen' );
-		wp_enqueue_style( 'chosen' );
+		wp_enqueue_script( 'select2' );
+		wp_enqueue_style( 'select2' );
 		wp_enqueue_script('fsn_base_components_admin', get_template_directory_uri() . '/js/fsn-base-components-admin.js', array( 'jquery','jquery-ui-autocomplete','jquery-ui-sortable'));
 		wp_localize_script( 'fsn_base_components_admin', 'fsnBaseJS', array(
-				'fsnEditLayoutNonce' => wp_create_nonce('fsn-admin-edit-layout')
+				'fsnEditLayoutNonce' => wp_create_nonce('fsn-admin-edit-layout'),
+				'fsnEditNonce' => wp_create_nonce('fsn-admin-edit')
 			)
 		);
 	}
@@ -35,14 +36,6 @@ function fsn_base_layout_page() {
 			<?php submit_button('Save Changes', 'primary'); ?>
 		</form>
 	</div>
-	<script>
-		jQuery(document).ready(function() {
-			//chosen plugin
-			jQuery('.fsn-base-add-list-layout').chosen({
-				width : '100%'
-			});
-		});
-	</script>
 	<style>
 		.appearance_page_fsn_base_layout .form-table th	{
 			display:none;	
@@ -50,6 +43,9 @@ function fsn_base_layout_page() {
 		.appearance_page_fsn_base_layout .form-table td	{
 			padding-left:0;
 			padding-right:0;
+		}
+		#fsn-base-list-items-sort	{
+			margin-bottom:25px;
 		}
     	#fsn-base-list-items-sort .list-item	{
 			padding:10px;
@@ -128,7 +124,7 @@ function fsn_base_layout_builder_output() {
     	if ( !empty($fsn_base_list_items) ) {
     		$i = 0;
     		foreach($fsn_base_list_items as $fsn_base_list_item) {
-    			if ($fsn_base_list_item[item_id] == 'divider') {
+    			if ($fsn_base_list_item['item_id'] == 'divider') {
     				$item_class = 'list-item content-item';
     				$item_title = 'Page Content';
     				$item_value = 'divider';
@@ -166,22 +162,9 @@ function fsn_base_layout_builder_output() {
     echo '</div>';
      
     //item select box
-    $post_type = 'component';
-	$args = array(
-    	'numberposts' => -1,
-    	'post_type' => $post_type
-    );
-    $selectable_posts = get_posts($args);
-    $post_type_object = get_post_type_object($post_type);
-    echo '<div class="list-select-group" data-post-type="'. $post_type .'">';
-	    echo '<h4>Add a '. $post_type_object->labels->singular_name .'</h4>';
-	    echo '<select class="fsn-base-add-list-layout" name="fsn-base-add-list-layout" data-placeholder="'. __('Choose ', 'fusion-base') . $post_type_object->labels->singular_name .'.">';
-	    	echo '<option value=""></option>';
-	    	foreach($selectable_posts as $selectable_post) {
-	    		echo '<option value="'. $selectable_post->ID .'">'. $selectable_post->post_title .'</option>';
-	    	}
-	    echo '</select>';
-    echo '</div>';
+    echo '<select class="fsn-base-add-list-layout select2-posts-element" name="fsn-base-add-list-layout" data-placeholder="'. __('Choose Component.', 'fusion-base') .'" data-post-type="component" style="width:100%;">';
+    	echo '<option></option>';
+    echo '</select>';
 }
 
 //add list items via AJAX
@@ -194,7 +177,7 @@ function fsn_base_list_builder_add_item() {
 	if ( !current_user_can( 'edit_theme_options' ) )
 		die( '-1' );
 	
-	$list_item_id = intval( $_POST['item_id'] );
+	$list_item_id = intval($_POST['item_id']);
 	$list_item = get_post($list_item_id);
 	echo '<div class="list-item">';		
 		echo '<div class="list-item-details">';

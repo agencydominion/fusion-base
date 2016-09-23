@@ -59,3 +59,50 @@ function adupdateListNumbers() {
 		items.eq(i).find('.list-item-id').attr('name','fsn_base_layout_options[layout_builder]['+ i +'][item_id]');
 	}
 }
+
+//init select2 fields
+jQuery(document).ready(function() {
+	fsnBaseInitPostSelect();
+});
+
+function fsnBaseInitPostSelect() {
+	var select2Elements = jQuery('.select2-posts-element');
+	select2Elements.each(function() {
+		var select2Element = jQuery(this);
+		var postsPerPage = 30;
+		var postType  = select2Element.data('postType');
+		select2Element.select2({
+			ajax: {
+				url: ajaxurl,
+				dataType: 'json',
+				method: 'POST',
+			    delay: 250,
+			    data: function (params) {
+					return {
+						q: params.term, // search term
+						page: params.page,
+						action: 'fsn_posts_search',
+						posts_per_page: postsPerPage,
+						postType: postType,
+						security: fsnBaseJS.fsnEditNonce
+					};
+			    },
+			    processResults: function (data, params) {
+					params.page = params.page || 1;
+					return {
+						results: data.items,
+						pagination: {
+							more: (params.page * postsPerPage) < data.total_count
+						}
+					};
+				},
+			},
+			minimumInputLength: 1,
+			language: {
+				inputTooShort: function(args) {
+					return 'Start typing to search...';
+				}
+			}
+		});
+	});	
+}

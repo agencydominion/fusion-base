@@ -65,7 +65,7 @@ function fsn_base_dashboard_glance_items() {
         if ( current_user_can( 'edit_posts' ) ) {
             $cpt_name = $post_type->name;
         }
-        echo '<li class="'.$cpt_name.'-count"><a href="edit.php?post_type='.$cpt_name.'">' . $num . ' ' . $text . '</a></li>';
+        echo '<li class="'.esc_attr($cpt_name).'-count"><a href="edit.php?post_type='.esc_attr($cpt_name).'">' . esc_html($num) . ' ' . esc_html($text) . '</a></li>';
     }
     $taxonomies = get_taxonomies( $args , $output , $operator );
     foreach( $taxonomies as $taxonomy ) {
@@ -75,7 +75,7 @@ function fsn_base_dashboard_glance_items() {
         if ( current_user_can( 'manage_categories' ) ) {
             $cpt_tax = $taxonomy->name;
         }
-        echo '<li class="post-count"><a href="edit-tags.php?taxonomy='.$cpt_tax.'">' . $num . ' ' . $text . '</a></li>';
+        echo '<li class="post-count"><a href="edit-tags.php?taxonomy='.esc_attr($cpt_tax).'">' . esc_html($num) . ' ' . esc_html($text) . '</a></li>';
     }
 }
 add_action( 'dashboard_glance_items' , 'fsn_base_dashboard_glance_items' );
@@ -249,7 +249,7 @@ if (!function_exists('fsn_pagination')) {
  */
  
 if (!function_exists('fsn_get_post_meta')) {
-	function fsn_base_get_post_meta($args) {
+	function fsn_base_get_post_meta($args = false) {
 		global $post;
 		
 		$defaults = array(
@@ -278,12 +278,14 @@ if (!function_exists('fsn_get_post_meta')) {
 				$numcats = count($categories_array);
 				$i = 0;
 				$categories = '';
-				foreach($categories_array as $category) {
-					$i++;
-					$categories .= '<a href="'. get_term_link($category, $taxonomy) .'">'. $category->name .'</a>';
-					$categories .= $i < $numcats ? ', ' : '';
+				if (!empty($categories_array)) {
+					foreach($categories_array as $category) {
+						$i++;
+						$categories .= '<a href="'. get_term_link($category, $taxonomy) .'">'. $category->name .'</a>';
+						$categories .= $i < $numcats ? ', ' : '';
+					}
+					$output .= !empty($author) || !empty($date) ? ' '. $separator .' '. $categories : $categories;
 				}
-				$output .= !empty($author) || !empty($date) ? ' '. $separator .' '. $categories : $categories;
 			}
 		}
 		if (!empty($tags)) {

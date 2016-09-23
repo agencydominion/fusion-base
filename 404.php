@@ -1,5 +1,5 @@
 <?php
 header("HTTP/1.1 301 Moved Permanently");
-header("Location: ".home_url());
+header("Location: ".esc_url(home_url()));
 exit();
 ?>
