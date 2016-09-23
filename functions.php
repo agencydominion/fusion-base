@@ -249,7 +249,7 @@ if (!function_exists('fsn_pagination')) {
  */
  
 if (!function_exists('fsn_get_post_meta')) {
-	function fsn_base_get_post_meta($args) {
+	function fsn_base_get_post_meta($args = false) {
 		global $post;
 		
 		$defaults = array(
@@ -278,12 +278,14 @@ if (!function_exists('fsn_get_post_meta')) {
 				$numcats = count($categories_array);
 				$i = 0;
 				$categories = '';
-				foreach($categories_array as $category) {
-					$i++;
-					$categories .= '<a href="'. get_term_link($category, $taxonomy) .'">'. $category->name .'</a>';
-					$categories .= $i < $numcats ? ', ' : '';
+				if (!empty($categories_array)) {
+					foreach($categories_array as $category) {
+						$i++;
+						$categories .= '<a href="'. get_term_link($category, $taxonomy) .'">'. $category->name .'</a>';
+						$categories .= $i < $numcats ? ', ' : '';
+					}
+					$output .= !empty($author) || !empty($date) ? ' '. $separator .' '. $categories : $categories;
 				}
-				$output .= !empty($author) || !empty($date) ? ' '. $separator .' '. $categories : $categories;
 			}
 		}
 		if (!empty($tags)) {
