@@ -2,8 +2,8 @@
 		<div id="fsn-base-search-results" class="container">
 			<?php 
 				$total_results = $wp_query->found_posts;
-				$feedback = _n('match', 'matches', $total_results, 'fusion-base');
-				echo sprintf(__('<div class="search-results-summary">Found <span class="search-results-number">%1$d</span> %2$s for <span class="search-results-term">%3$s</span></div>', 'fusion-base'), $total_results, $feedback, get_search_query());
+				$feedback = _n('match', 'matches', $total_results, 'fusion-base');				
+				echo '<div class="search-results-summary">'. __('Found', 'fusion-base') .' <span class="search-results-number">'. $total_results .'</span> '. $feedback .' '. __('for', 'fusion-base') .' <span class="search-results-term">'. get_search_query() .'</span></div>';
 			?>
 		</div>
 		<div class="container">

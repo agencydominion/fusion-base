@@ -136,7 +136,7 @@ function fsn_base_register_sidebars() {
 add_filter( 'comment_form_default_fields', 'fsn_comment_form_default_fields' );
 function fsn_comment_form_default_fields($fields) {
 	
-	if ( null === $post_id )
+	if ( empty($post_id) )
 		$post_id = get_the_ID();
 
 	$commenter = wp_get_current_commenter();

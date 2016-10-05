@@ -6,7 +6,7 @@
 //LAYOUT PAGE
 add_action('admin_menu', 'fsn_base_layout_add_page');
 function fsn_base_layout_add_page() {
-	$theme_options = add_theme_page( 'Layout', 'Layout', 'edit_theme_options', 'fsn_base_layout', 'fsn_base_layout_page' );
+	$theme_options = add_theme_page( __('Layout', 'fusion-base'), __('Layout', 'fusion-base'), 'edit_theme_options', 'fsn_base_layout', 'fsn_base_layout_page' );
 }
 
 //enqueue scripts
@@ -21,6 +21,12 @@ function fsn_base_layout_admin_scripts($hook) {
 				'fsnEditNonce' => wp_create_nonce('fsn-admin-edit')
 			)
 		);
+		//add translation strings to script
+		$translation_array = array(
+			'error' => __('Oops, something went wrong. Please reload the page and try again.','fusion-base'),
+			'search' => __('Start typing to search...', 'fusion-base')
+		);
+		wp_localize_script('fsn_base_components_admin', 'string_translation', $translation_array);
 	}
 }
 
@@ -28,12 +34,12 @@ function fsn_base_layout_admin_scripts($hook) {
 function fsn_base_layout_page() {
 	?>
 	<div class="wrap">
-		<h2>Layout</h2>
+		<h2><?php _e('Layout', 'fusion-base'); ?></h2>
 		<?php settings_errors(); ?>
 		<form action="options.php" method="post">
 			<?php settings_fields('fsn_base_layout_options'); ?>
 			<?php do_settings_sections('fsn_base_layout'); ?>			
-			<?php submit_button('Save Changes', 'primary'); ?>
+			<?php submit_button(__('Save Changes', 'fusion-base'), 'primary'); ?>
 		</form>
 	</div>
 	<style>
@@ -91,14 +97,14 @@ function fsn_base_layout_admin_init(){
 	//sections	
 	add_settings_section(
 		'fsn_base_layout_options',
-		'Master Layout Builder',
+		__('Master Layout Builder', 'fusion-base'),
 		'fsn_base_layout_options_section',
 		'fsn_base_layout'
 	);
 	//layout settings fields
 	add_settings_field(
 		'fsn_base_layout_builder',
-		'Layout Builder UI',
+		__('Layout Builder UI', 'fusion-base'),
 		'fsn_base_layout_builder_output',
 		'fsn_base_layout',
 		'fsn_base_layout_options'
@@ -107,7 +113,7 @@ function fsn_base_layout_admin_init(){
 
 /* Draw the section headers */
 function fsn_base_layout_options_section() {
-	echo '<p>Choose and place the Components above and below the <strong>Page Content</strong> to control the master layout of the site.</p>';
+	echo '<p>'. __('Choose and place the Components above and below the <strong>Page Content</strong> to control the master layout of the site.', 'fusion-base') .'</p>';
 }
 
 /* Display and fill the form fields */
@@ -126,7 +132,7 @@ function fsn_base_layout_builder_output() {
     		foreach($fsn_base_list_items as $fsn_base_list_item) {
     			if ($fsn_base_list_item['item_id'] == 'divider') {
     				$item_class = 'list-item content-item';
-    				$item_title = 'Page Content';
+    				$item_title = __('Page Content', 'fusion-base');
     				$item_value = 'divider';
     			} else {
 	    			$list_item = get_post($fsn_base_list_item['item_id']);
@@ -143,7 +149,7 @@ function fsn_base_layout_builder_output() {
 				    	echo '<input class="list-item-id" type="hidden" name="fsn_base_layout_options[layout_builder]['. $i .'][item_id]" value="'. $item_value .'">';
 			    	echo '</div>';
 			    	if ($item_value != 'divider') {
-			    		echo '<a href="#" class="fsn-base-remove-list-item">remove</a>';
+			    		echo '<a href="#" class="fsn-base-remove-list-item">'. __('remove', 'fusion-base') .'</a>';
 			    	}
 				echo '</div>';
 				$i++;
@@ -153,7 +159,7 @@ function fsn_base_layout_builder_output() {
 	    	echo '<div class="list-item content-item">';					
 				echo '<div class="list-item-details">';
 					//title
-					echo '<p><strong>Page Content</strong></p>';
+					echo '<p><strong>'. __('Page Content', 'fusion-base') .'</strong></p>';
 					//id input
 			    	echo '<input class="list-item-id" type="hidden" name="fsn_base_layout_options[layout_builder][][item_id]" value="divider">';
 		    	echo '</div>';
@@ -186,7 +192,7 @@ function fsn_base_list_builder_add_item() {
 			//id input
 	    	echo '<input class="list-item-id" type="hidden" name="fsn_base_layout_options[layout_builder][][item_id]" value="'. $list_item->ID .'">';
     	echo '</div>';
-    	echo '<a href="#" class="fsn-base-remove-list-item">remove</a>';
+    	echo '<a href="#" class="fsn-base-remove-list-item">'. __('remove', 'fusion-base') .'</a>';
 	echo '</div>';
 	exit;
 }
