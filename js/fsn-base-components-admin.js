@@ -18,7 +18,7 @@ jQuery(document).ready(function() {
 		};	
 		jQuery.post(ajaxurl, data, function(response) {
 			if (response == '-1') {
-				alert(string_translation.error);
+				alert(fsnBaseL10n.error);
 				return false;
 			}
 			listItemsContainer.append(response);
@@ -100,7 +100,7 @@ function fsnBaseInitPostSelect() {
 			minimumInputLength: 1,
 			language: {
 				inputTooShort: function(args) {
-					return string_translation.search;
+					return fsnBaseL10n.search;
 				}
 			}
 		});
