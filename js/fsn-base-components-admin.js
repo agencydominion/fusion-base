@@ -102,6 +102,9 @@ function fsnBaseInitPostSelect() {
 				inputTooShort: function(args) {
 					return fsnBaseL10n.search;
 				}
+			},
+			escapeMarkup: function (text) {
+				return text;
 			}
 		});
 	});	
