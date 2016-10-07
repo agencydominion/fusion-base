@@ -23,10 +23,10 @@ function fsn_base_layout_admin_scripts($hook) {
 		);
 		//add translation strings to script
 		$translation_array = array(
-			'error' => __('Oops, something went wrong. Please reload the page and try again.','fusion-base'),
+			'error' => __('Oops, something went wrong. Please reload the page and try again.', 'fusion-base'),
 			'search' => __('Start typing to search...', 'fusion-base')
 		);
-		wp_localize_script('fsn_base_components_admin', 'string_translation', $translation_array);
+		wp_localize_script('fsn_base_components_admin', 'fsnBaseL10n', $translation_array);
 	}
 }
 
