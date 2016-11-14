@@ -4,39 +4,44 @@
  * Basic Initialization
  */
 
-// Initialize the language files
-load_theme_textdomain( 'fusion-base', get_template_directory() . '/languages' );
+function fsn_base_setup() {
 
-//add post thumbnails support
-add_theme_support( 'post-thumbnails' );
-
-//custom background support
-add_theme_support( 'custom-background' );
-
-//automatic feed links support
-add_theme_support( 'automatic-feed-links' );
-
-//selective refresh for widgets in the customizer
-add_theme_support( 'customize-selective-refresh-widgets' );
-
-//define content width
-if ( ! isset( $content_width ) ) {
-	$content_width = 2560;
-}
-
-//add title tag support
-add_theme_support( 'title-tag' );
-if ( ! function_exists( '_wp_render_title_tag' ) ) {
-	function theme_slug_render_title() {
-		?>
-		<title><?php wp_title(); ?></title>
-		<?php
+	// Initialize the language files
+	load_theme_textdomain( 'fusion-base', get_template_directory() . '/languages' );
+	
+	//add post thumbnails support
+	add_theme_support( 'post-thumbnails' );
+	
+	//custom background support
+	add_theme_support( 'custom-background' );
+	
+	//automatic feed links support
+	add_theme_support( 'automatic-feed-links' );
+	
+	//selective refresh for widgets in the customizer
+	add_theme_support( 'customize-selective-refresh-widgets' );
+	
+	//add title tag support
+	add_theme_support( 'title-tag' );
+	if ( ! function_exists( '_wp_render_title_tag' ) ) {
+		function theme_slug_render_title() {
+			?>
+			<title><?php wp_title(); ?></title>
+			<?php
+		}
+		add_action( 'wp_head', 'theme_slug_render_title' );
 	}
-	add_action( 'wp_head', 'theme_slug_render_title' );
-}
+	
+	//add editor stylesheet
+	add_editor_style();
+	
+	//define content width
+	if ( ! isset( $content_width ) ) {
+		$content_width = 2560;
+	}
 
-//add editor stylesheet
-add_editor_style();
+}
+add_action( 'after_setup_theme', 'fsn_base_setup' );
 
 //customize excerpt end tag
 function fsn_base_excerpt_more() {
