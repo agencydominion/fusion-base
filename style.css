@@ -523,6 +523,9 @@ h3#reply-title	{
 	.component	{
 		min-width:960px;
 	}
+	.component .component	{
+		min-width:0;
+	}
 	.full-width-container .full-width-row .container	{
 		width:auto;
 		max-width:960px;
