@@ -49,37 +49,6 @@ function fsn_base_excerpt_more() {
 }
 add_filter('excerpt_more', 'fsn_base_excerpt_more');
 
-//add custom post types and taxonomies to the "At a Glance" dashboard widget
-function fsn_base_dashboard_glance_items() {
-	$args = array(
-        'public' => true ,
-        '_builtin' => false
-    );
-    $output = 'object';
-    $operator = 'and';
-    $post_types = get_post_types( $args , $output , $operator );
-    foreach( $post_types as $post_type ) {
-        $num_posts = wp_count_posts( $post_type->name );
-        $num = number_format_i18n( $num_posts->publish );
-        $text = sprintf(_n( '%1$s', '%2$s', intval( $num_posts->publish ), 'fusion-base' ), $post_type->labels->singular_name, $post_type->labels->name);
-        if ( current_user_can( 'edit_posts' ) ) {
-            $cpt_name = $post_type->name;
-        }
-        echo '<li class="'.esc_attr($cpt_name).'-count"><a href="edit.php?post_type='.esc_attr($cpt_name).'">' . esc_html($num) . ' ' . esc_html($text) . '</a></li>';
-    }
-    $taxonomies = get_taxonomies( $args , $output , $operator );
-    foreach( $taxonomies as $taxonomy ) {
-        $num_terms  = wp_count_terms( $taxonomy->name );
-        $num = number_format_i18n( $num_terms );
-        $text = sprintf(_n( '%1$s', '%2$s', intval( $num_terms ), 'fusion-base'), $taxonomy->labels->name, $taxonomy->labels->name);
-        if ( current_user_can( 'manage_categories' ) ) {
-            $cpt_tax = $taxonomy->name;
-        }
-        echo '<li class="post-count"><a href="edit-tags.php?taxonomy='.esc_attr($cpt_tax).'">' . esc_html($num) . ' ' . esc_html($text) . '</a></li>';
-    }
-}
-add_action( 'dashboard_glance_items' , 'fsn_base_dashboard_glance_items' );
-
 /**
  * Scripts and Styles
  */
