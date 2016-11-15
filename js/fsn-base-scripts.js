@@ -1,3 +1,0 @@
-/**
- * Fusion Theme Scripts
- */

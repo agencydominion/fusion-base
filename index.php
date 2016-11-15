@@ -7,9 +7,9 @@
 						<?php if (has_post_thumbnail()) {
 							if (function_exists('fsn_get_dynamic_image')) {
 								$attachment_id = get_post_thumbnail_id($post->ID);
-								echo '<a href="'. get_permalink() .'" class="blogroll-post-image">'. fsn_get_dynamic_image($attachment_id, 'img-responsive', 'medium', 'mobile') .'</a>';
+								echo '<a href="'. esc_url(get_permalink()) .'" class="blogroll-post-image">'. fsn_get_dynamic_image($attachment_id, 'img-responsive', 'medium', 'mobile') .'</a>';
 							} else {
-								echo '<a href="'. get_permalink() .'" class="blogroll-post-image">'. get_the_post_thumbnail($post, 'medium', array( 'class' => 'img-responsive' )) .'</a>';
+								echo '<a href="'. esc_url(get_permalink()) .'" class="blogroll-post-image">'. get_the_post_thumbnail($post, 'medium', array( 'class' => 'img-responsive' )) .'</a>';
 							}
 						} ?>
 					</div>

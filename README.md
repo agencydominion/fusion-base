@@ -4,6 +4,6 @@ The Fusion Base is a blank-canvas theme that is designed to work hand in hand wi
 
 The Fusion Base also adds a Layout page in the admin for building a Master Layout for your site. This allows you to add and arrange Components that are output above and/or below the post content on every post and page. This feature is most useful for building custom headers and footers that are easy to maintain from one location.
 
-[Read about Components in the Fusion User guide](https://agencydominion.zendesk.com/hc/en-us/articles/220113488-Reusable-Layout-Components)
+[Read about Components in the Fusion User guide](http://agencydominion.helpscoutdocs.com/article/16-reusable-layout-components)
 
 [Download Fusion from the WordPress Plugin Directory](https://wordpress.org/plugins/fusion/)

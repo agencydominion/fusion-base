@@ -4,39 +4,44 @@
  * Basic Initialization
  */
 
-// Initialize the language files
-load_theme_textdomain( 'fusion-base', get_template_directory() . '/languages' );
+function fsn_base_setup() {
 
-//add post thumbnails support
-add_theme_support( 'post-thumbnails' );
-
-//custom background support
-add_theme_support( 'custom-background' );
-
-//automatic feed links support
-add_theme_support( 'automatic-feed-links' );
-
-//selective refresh for widgets in the customizer
-add_theme_support( 'customize-selective-refresh-widgets' );
-
-//define content width
-if ( ! isset( $content_width ) ) {
-	$content_width = 2560;
-}
-
-//add title tag support
-add_theme_support( 'title-tag' );
-if ( ! function_exists( '_wp_render_title_tag' ) ) {
-	function theme_slug_render_title() {
-		?>
-		<title><?php wp_title(); ?></title>
-		<?php
+	// Initialize the language files
+	load_theme_textdomain( 'fusion-base', get_template_directory() . '/languages' );
+	
+	//add post thumbnails support
+	add_theme_support( 'post-thumbnails' );
+	
+	//custom background support
+	add_theme_support( 'custom-background' );
+	
+	//automatic feed links support
+	add_theme_support( 'automatic-feed-links' );
+	
+	//selective refresh for widgets in the customizer
+	add_theme_support( 'customize-selective-refresh-widgets' );
+	
+	//add title tag support
+	add_theme_support( 'title-tag' );
+	if ( ! function_exists( '_wp_render_title_tag' ) ) {
+		function theme_slug_render_title() {
+			?>
+			<title><?php wp_title(); ?></title>
+			<?php
+		}
+		add_action( 'wp_head', 'theme_slug_render_title' );
 	}
-	add_action( 'wp_head', 'theme_slug_render_title' );
-}
+	
+	//add editor stylesheet
+	add_editor_style();
+	
+	//define content width
+	if ( ! isset( $content_width ) ) {
+		$content_width = 2560;
+	}
 
-//add editor stylesheet
-add_editor_style();
+}
+add_action( 'after_setup_theme', 'fsn_base_setup' );
 
 //customize excerpt end tag
 function fsn_base_excerpt_more() {
@@ -49,37 +54,6 @@ function fsn_base_excerpt_more() {
 }
 add_filter('excerpt_more', 'fsn_base_excerpt_more');
 
-//add custom post types and taxonomies to the "At a Glance" dashboard widget
-function fsn_base_dashboard_glance_items() {
-	$args = array(
-        'public' => true ,
-        '_builtin' => false
-    );
-    $output = 'object';
-    $operator = 'and';
-    $post_types = get_post_types( $args , $output , $operator );
-    foreach( $post_types as $post_type ) {
-        $num_posts = wp_count_posts( $post_type->name );
-        $num = number_format_i18n( $num_posts->publish );
-        $text = sprintf(_n( '%1$s', '%2$s', intval( $num_posts->publish ), 'fusion-base' ), $post_type->labels->singular_name, $post_type->labels->name);
-        if ( current_user_can( 'edit_posts' ) ) {
-            $cpt_name = $post_type->name;
-        }
-        echo '<li class="'.esc_attr($cpt_name).'-count"><a href="edit.php?post_type='.esc_attr($cpt_name).'">' . esc_html($num) . ' ' . esc_html($text) . '</a></li>';
-    }
-    $taxonomies = get_taxonomies( $args , $output , $operator );
-    foreach( $taxonomies as $taxonomy ) {
-        $num_terms  = wp_count_terms( $taxonomy->name );
-        $num = number_format_i18n( $num_terms );
-        $text = sprintf(_n( '%1$s', '%2$s', intval( $num_terms ), 'fusion-base'), $taxonomy->labels->name, $taxonomy->labels->name);
-        if ( current_user_can( 'manage_categories' ) ) {
-            $cpt_tax = $taxonomy->name;
-        }
-        echo '<li class="post-count"><a href="edit-tags.php?taxonomy='.esc_attr($cpt_tax).'">' . esc_html($num) . ' ' . esc_html($text) . '</a></li>';
-    }
-}
-add_action( 'dashboard_glance_items' , 'fsn_base_dashboard_glance_items' );
-
 /**
  * Scripts and Styles
  */
@@ -91,19 +65,12 @@ function fsn_base_script_enqueue() {
 	wp_enqueue_script('jquery');
 	wp_enqueue_style('bootstrap', trailingslashit( get_template_directory_uri() ) .'css/bootstrap.min.css', array(), '3.3.6');
 	wp_enqueue_script('bootstrap', trailingslashit( get_template_directory_uri() ) .'js/vendor/bootstrap.min.js', array('jquery'), '3.3.5', true);
+	wp_enqueue_script( 'modernizr', trailingslashit( get_template_directory_uri() ) .'js/vendor/modernizr-2.8.3-respond-1.4.2.min.js', false, '2.8.3');
 	wp_enqueue_style('fsn_base_styles', get_stylesheet_uri(), array('bootstrap'));
-	wp_enqueue_script('fsn_base_scripts', trailingslashit( get_template_directory_uri() ) .'js/fsn-base-scripts.js', array('jquery','bootstrap'), '2.4.1', true);
 	
 	if ( is_singular() && get_option( 'thread_comments' ) ) {
 		wp_enqueue_script( 'comment-reply' );	
 	}
-	
-	//setup theme-scripts.js for use with AJAX
-	wp_localize_script( 'fsn_base_scripts', 'fsnThemeAjax', array(
-			'ajaxurl' => admin_url( 'admin-ajax.php' ),
-			'themeurl' =>  trailingslashit( get_template_directory_uri() )
-		)
-	);
 }
 
 /**
@@ -281,7 +248,7 @@ if (!function_exists('fsn_get_post_meta')) {
 				if (!empty($categories_array)) {
 					foreach($categories_array as $category) {
 						$i++;
-						$categories .= '<a href="'. get_term_link($category, $taxonomy) .'">'. $category->name .'</a>';
+						$categories .= '<a href="'. esc_url(get_term_link($category, $taxonomy)) .'">'. $category->name .'</a>';
 						$categories .= $i < $numcats ? ', ' : '';
 					}
 					$output .= !empty($author) || !empty($date) ? ' '. $separator .' '. $categories : $categories;
@@ -297,7 +264,7 @@ if (!function_exists('fsn_get_post_meta')) {
 			if (!empty($tags_array)) {
 				foreach($tags_array as $tag) {
 					$i++;
-					$tags .= '<a href="'. get_term_link($tag, $taxonomy) .'">'. $tag->name .'</a>';
+					$tags .= '<a href="'. esc_url(get_term_link($tag, $taxonomy)) .'">'. $tag->name .'</a>';
 					$tags .= $i < $numtags ? ', ' : '';
 				}
 				$output .= '<br><span class="post-tags">'. $tags .'</span>';

@@ -135,18 +135,18 @@ function fsn_base_layout_builder_output() {
     				$item_title = __('Page Content', 'fusion-base');
     				$item_value = 'divider';
     			} else {
-	    			$list_item = get_post($fsn_base_list_item['item_id']);
+	    			$list_item = get_post(intval($fsn_base_list_item['item_id']));
 	    			$item_class = 'list-item';
 	    			$item_title = $list_item->post_title;
     				$item_value = $list_item->ID;
     			}
     			
-    			echo '<div class="'. $item_class .'">';					
+    			echo '<div class="'. esc_attr($item_class) .'">';					
 					echo '<div class="list-item-details">';
 						//title
-						echo '<p><strong>'. $item_title .'</strong></p>';						
+						echo '<p><strong>'. esc_html($item_title) .'</strong></p>';						
 						//id input
-				    	echo '<input class="list-item-id" type="hidden" name="fsn_base_layout_options[layout_builder]['. $i .'][item_id]" value="'. $item_value .'">';
+				    	echo '<input class="list-item-id" type="hidden" name="fsn_base_layout_options[layout_builder]['. $i .'][item_id]" value="'. esc_attr($item_value) .'">';
 			    	echo '</div>';
 			    	if ($item_value != 'divider') {
 			    		echo '<a href="#" class="fsn-base-remove-list-item">'. __('remove', 'fusion-base') .'</a>';
@@ -188,9 +188,9 @@ function fsn_base_list_builder_add_item() {
 	echo '<div class="list-item">';		
 		echo '<div class="list-item-details">';
 			//title
-			echo '<p><strong>'. $list_item->post_title .'</strong></p>';
+			echo '<p><strong>'. esc_html($list_item->post_title) .'</strong></p>';
 			//id input
-	    	echo '<input class="list-item-id" type="hidden" name="fsn_base_layout_options[layout_builder][][item_id]" value="'. $list_item->ID .'">';
+	    	echo '<input class="list-item-id" type="hidden" name="fsn_base_layout_options[layout_builder][][item_id]" value="'. esc_attr($list_item->ID) .'">';
     	echo '</div>';
     	echo '<a href="#" class="fsn-base-remove-list-item">'. __('remove', 'fusion-base') .'</a>';
 	echo '</div>';
@@ -273,7 +273,7 @@ function fsn_base_output_components($components = false) {
 	if ( !empty($components) && is_array($components) ) {
 		foreach($components as $component) {
 			$component_object = get_post($component->id);
-			echo '<div id="component-'. $component->id .'" class="component clearfix">';
+			echo '<div id="component-'. esc_attr($component->id) .'" class="component clearfix">';
 	    		echo apply_filters('the_content', $component_object->post_content);
 			echo '</div>';
 		}
