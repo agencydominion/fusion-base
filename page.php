@@ -2,8 +2,7 @@
 		<?php if(have_posts()) : ?><?php while(have_posts()) : the_post(); ?>
 		<article id="post-<?php the_ID(); ?>" <?php post_class(); ?>>
 			<?php the_content(); ?>
-			<?php wp_link_pages(); ?>																							
-			<?php //edit_post_link( __( 'edit', 'fusion-base' ), '', '', 0, 'post-edit-link btn btn-default btn-xs'); ?>
+			<?php wp_link_pages(); ?>
 		</article>
 		<?php endwhile; ?>				
 		<?php else: ?>
