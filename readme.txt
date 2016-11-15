@@ -47,6 +47,14 @@ Source: http://getbootstrap.com
 
 Glyphicons Halflings icon fonts are bundled with Bootstrap (http://glyphicons.com/)
 
+Modernizr 2.8.3 (Custom Build)
+Licenses: MIT
+Source: https://modernizr.com/
+
+Respond.js v1.4.2 Copyright 2014 Scott Jehl
+Licenses: MIT
+Source: https://github.com/scottjehl/Respond
+
 Images used in screenshot.png: Photos by Unrestricted Stock (http://unrestrictedstock.com/), licence agreement (http://unrestrictedstock.com/use-agreement/)
 
 == Changelog ==
