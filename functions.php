@@ -247,7 +247,7 @@ if (!function_exists('fsn_get_post_meta')) {
 				if (!empty($categories_array)) {
 					foreach($categories_array as $category) {
 						$i++;
-						$categories .= '<a href="'. get_term_link($category, $taxonomy) .'">'. $category->name .'</a>';
+						$categories .= '<a href="'. esc_url(get_term_link($category, $taxonomy)) .'">'. $category->name .'</a>';
 						$categories .= $i < $numcats ? ', ' : '';
 					}
 					$output .= !empty($author) || !empty($date) ? ' '. $separator .' '. $categories : $categories;
@@ -263,7 +263,7 @@ if (!function_exists('fsn_get_post_meta')) {
 			if (!empty($tags_array)) {
 				foreach($tags_array as $tag) {
 					$i++;
-					$tags .= '<a href="'. get_term_link($tag, $taxonomy) .'">'. $tag->name .'</a>';
+					$tags .= '<a href="'. esc_url(get_term_link($tag, $taxonomy)) .'">'. $tag->name .'</a>';
 					$tags .= $i < $numtags ? ', ' : '';
 				}
 				$output .= '<br><span class="post-tags">'. $tags .'</span>';
