@@ -139,6 +139,10 @@ function fsn_base_layout_builder_output() {
 	    			$item_class = 'list-item';
 	    			$item_title = $list_item->post_title;
     				$item_value = $list_item->ID;
+    				//ensure component is published
+	    			if (empty($list_item) || $list_item->post_status != 'publish') {
+		    			continue;
+	    			}
     			}
     			
     			echo '<div class="'. esc_attr($item_class) .'">';					
@@ -273,9 +277,11 @@ function fsn_base_output_components($components = false) {
 	if ( !empty($components) && is_array($components) ) {
 		foreach($components as $component) {
 			$component_object = get_post($component->id);
-			echo '<div id="component-'. esc_attr($component->id) .'" class="component clearfix">';
-	    		echo apply_filters('the_content', $component_object->post_content);
-			echo '</div>';
+			if (!empty($component_object) && $component_object->post_status == 'publish') {
+				echo '<div id="component-'. esc_attr($component->id) .'" class="component clearfix">';
+		    		echo apply_filters('the_content', $component_object->post_content);
+				echo '</div>';
+			}
 		}
 	}
 }
