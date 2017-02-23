@@ -1,9 +1,6 @@
 <?php get_header(); ?>
 		<?php if(have_posts()) : ?><?php while(have_posts()) : the_post(); ?>
-		<article id="post-<?php the_ID(); ?>" <?php post_class(); ?>>
-			<?php the_content(); ?>
-			<?php wp_link_pages(); ?>
-		</article>
+			<?php get_template_part( 'template-parts/page/content', 'page' ); ?>
 		<?php endwhile; ?>				
 		<?php else: ?>
 		<div class="col-sm-12">
