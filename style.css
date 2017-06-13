@@ -282,20 +282,8 @@ h3#comments-title	{
 	color:#31708f;
 }
 
-.commentlist li:last-child	{
-	margin-bottom:0;
-}
-
 #comments .comment-body ul, #comments .comment-body ol	{
 	margin-bottom:18px;
-}
-
-#comments .comment-body p:last-child	{
-	margin-bottom:6px;
-}
-
-#comments .comment-body blockquote p:last-child	{
-	margin-bottom:24px;
 }
 
 .commentlist ol	{

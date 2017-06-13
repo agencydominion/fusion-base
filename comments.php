@@ -22,7 +22,7 @@
 		</nav> <!-- .navigation -->
 	<?php endif; // check for comment navigation ?>
 		<ol class="commentlist">
-			<?php wp_list_comments( array( 'callback' => 'fsn_base_comment' ) ); ?>
+			<?php wp_list_comments(); ?>
 		</ol>
 	<?php if ( get_comment_pages_count() > 1 && get_option( 'page_comments' ) ) : // Are there comments to navigate through? ?>
 		<nav class="comments-nav">
