@@ -12,7 +12,7 @@
 	?>
 	<?php if ( have_comments() ) : ?>
 		<h3 id="comments-title"><?php
-		printf( _n( 'One Comment on %2$s', '%1$s Comments on %2$s', get_comments_number(), 'fusion-base' ),
+		printf( _n( '%1$s Comment on %2$s', '%1$s Comments on %2$s', get_comments_number(), 'fusion-base' ),
 		number_format_i18n( get_comments_number() ), '<em>' . get_the_title() . '</em>' );
 		?></h3>
 	<?php if ( get_comment_pages_count() > 1 && get_option( 'page_comments' ) ) : // Are there comments to navigate through? ?>
