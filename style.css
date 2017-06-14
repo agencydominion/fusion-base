@@ -1,13 +1,14 @@
 @charset "UTF-8";
 /* 
 Theme Name: Fusion Base
-Theme URI: http://agencydominion.com
-Description: A Blank-canvas theme that is designed to work hand in hand with the Fusion plugin.
+Theme URI: https://wordpress.org/themes/fusion-base/
+Description: Fusion Base is a Boostrap based blank-canvas theme that is designed to work hand in hand with the Fusion plugin. The post and page templates use the entire browser window for post content output, meaning every aspect of your page is controlled by Fusion. This makes for limitless possibilities when it comes to the look and feel of your site.
 Author: Agency Dominion
-Version: 1.2.0
+Author URI: http://agencydominion.com
+Version: 1.2.1
 License: GNU General Public License v2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
-Tags: one-column, custom-background, editor-style, featured-images, threaded-comments, translation-ready
+Tags: one-column, custom-background, editor-style, featured-images, sticky-post, threaded-comments, translation-ready
 Text Domain: fusion-base
 */
  
@@ -282,20 +283,8 @@ h3#comments-title	{
 	color:#31708f;
 }
 
-.commentlist li:last-child	{
-	margin-bottom:0;
-}
-
 #comments .comment-body ul, #comments .comment-body ol	{
 	margin-bottom:18px;
-}
-
-#comments .comment-body p:last-child	{
-	margin-bottom:6px;
-}
-
-#comments .comment-body blockquote p:last-child	{
-	margin-bottom:24px;
 }
 
 .commentlist ol	{
