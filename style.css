@@ -1,17 +1,17 @@
 @charset "UTF-8";
-/* 
+/*
 Theme Name: Fusion Base
 Theme URI: https://wordpress.org/themes/fusion-base/
 Description: Fusion Base is a Boostrap based blank-canvas theme that is designed to work hand in hand with the Fusion plugin. The post and page templates use the entire browser window for post content output, meaning every aspect of your page is controlled by Fusion. This makes for limitless possibilities when it comes to the look and feel of your site.
 Author: Agency Dominion
 Author URI: http://agencydominion.com
-Version: 1.2.1
+Version: 1.3.0
 License: GNU General Public License v2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 Tags: one-column, custom-background, editor-style, featured-images, sticky-post, threaded-comments, translation-ready
 Text Domain: fusion-base
 */
- 
+
 /* =WordPress Core
 -------------------------------------------------------------- */
 .alignnone {
@@ -151,7 +151,7 @@ a img.aligncenter {
 	color:#ccc;
 }
 
-.size-auto, 
+.size-auto,
 .size-full,
 .size-large,
 .size-medium,

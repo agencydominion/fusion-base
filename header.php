@@ -4,12 +4,18 @@
         <meta charset="<?php bloginfo( 'charset' ); ?>">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <?php
-	    if (class_exists('Mobile_Detect')) {
-	    	$detect = new Mobile_Detect();
-	    	if ($detect->isMobile() && !$detect->isTablet()) {
-		  		echo '<meta name="viewport" content="width=device-width">';
-	    	}
-    	}
+        $options = get_option( 'fsn_options' );
+    		$fsn_meta_viewport = !empty($options['fsn_meta_viewport']) ? $options['fsn_meta_viewport'] : '';
+        if (!empty($fsn_meta_viewport)) {
+          echo '<meta name="viewport" content="width=device-width">';
+        } else {
+          if (class_exists('Mobile_Detect')) {
+            $detect = new Mobile_Detect();
+            if ($detect->isMobile() && !$detect->isTablet()) {
+              echo '<meta name="viewport" content="width=device-width">';
+            }
+          }
+        }
         ?>
 	    <?php wp_head(); ?>
     </head>
