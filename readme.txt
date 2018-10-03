@@ -2,7 +2,7 @@
 Contributors: Agency Dominion
 Requires at least: WordPress 3.9
 Tested up to: WordPress 4.9.1
-Version: 1.1.4
+Version: 1.3.1
 License: GNU General Public License v2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 Tags: one-column, custom-background, editor-style, featured-images, threaded-comments, translation-ready
