@@ -8,25 +8,25 @@ function fsn_base_setup() {
 
 	// Initialize the language files
 	load_theme_textdomain( 'fusion-base', get_template_directory() . '/languages' );
-	
+
 	//add post thumbnails support
 	add_theme_support( 'post-thumbnails' );
-	
+
 	//custom background support
 	add_theme_support( 'custom-background' );
-	
+
 	//automatic feed links support
 	add_theme_support( 'automatic-feed-links' );
-	
+
 	//selective refresh for widgets in the customizer
 	add_theme_support( 'customize-selective-refresh-widgets' );
-	
+
 	//add title tag support
 	add_theme_support( 'title-tag' );
-	
+
 	//add editor stylesheet
 	add_editor_style();
-	
+
 	//define content width
 	if ( ! isset( $content_width ) ) {
 		$content_width = 2560;
@@ -59,9 +59,9 @@ function fsn_base_script_enqueue() {
 	wp_enqueue_script('bootstrap', trailingslashit( get_template_directory_uri() ) .'js/vendor/bootstrap.min.js', array('jquery'), '3.3.7', true);
 	wp_enqueue_script( 'modernizr', trailingslashit( get_template_directory_uri() ) .'js/vendor/modernizr-3.3.1-respond-1.4.2.min.js', false, '3.3.1');
 	wp_enqueue_style('fsn_base_styles', get_stylesheet_uri(), array('bootstrap'));
-	
+
 	if ( is_singular() && get_option( 'thread_comments' ) ) {
-		wp_enqueue_script( 'comment-reply' );	
+		wp_enqueue_script( 'comment-reply' );
 	}
 }
 
@@ -72,7 +72,7 @@ function fsn_base_script_enqueue() {
 add_action( 'widgets_init', 'fsn_base_register_sidebars' );
 
 function fsn_base_register_sidebars() {
-	
+
 	//primary sidebar
 	register_sidebar(
 		array(
@@ -94,7 +94,7 @@ function fsn_base_register_sidebars() {
 //filter form fields
 add_filter( 'comment_form_default_fields', 'fsn_comment_form_default_fields' );
 function fsn_comment_form_default_fields($fields) {
-	
+
 	if ( empty($post_id) )
 		$post_id = get_the_ID();
 
@@ -109,11 +109,11 @@ function fsn_comment_form_default_fields($fields) {
 	$aria_req = ( $req ? " aria-required='true'" : '' );
 	$html_req = ( $req ? " required='required'" : '' );
 	$html5    = 'html5' === $args['format'];
-	
+
 	$fields['author'] = '<p class="comment-form-author">' . '<label for="author">' . __( 'Name', 'fusion-base' ) . ( $req ? ' <span class="required">*</span>' : '' ) . '</label> <input id="author" class="form-control" name="author" type="text" value="' . esc_attr( $commenter['comment_author'] ) . '" size="30"' . $aria_req . $html_req . ' /></p>';
 	$fields['email'] = '<p class="comment-form-email"><label for="email">' . __( 'Email', 'fusion-base' ) . ( $req ? ' <span class="required">*</span>' : '' ) . '</label> <input id="email" class="form-control" name="email" ' . ( $html5 ? 'type="email"' : 'type="text"' ) . ' value="' . esc_attr(  $commenter['comment_author_email'] ) . '" size="30" aria-describedby="email-notes"' . $aria_req . $html_req  . ' /></p>';
 	$fields['url'] = '<p class="comment-form-url"><label for="url">' . __( 'Website', 'fusion-base' ) . '</label> <input id="url" class="form-control" name="url" ' . ( $html5 ? 'type="url"' : 'type="text"' ) . ' value="' . esc_attr( $commenter['comment_author_url'] ) . '" size="30" /></p>';
-	
+
 	return $fields;
 }
 
@@ -133,7 +133,7 @@ function fsn_comment_form_defaults($defaults) {
  * @since 1.0.0
  *
  */
- 
+
 //pagination **passing a $query_max_pages fixes pagination for custom WP_Query objects
 if (!function_exists('fsn_pagination')) {
 	function fsn_base_pagination($query_max_pages = false) {
@@ -163,11 +163,11 @@ if (!function_exists('fsn_pagination')) {
  *
  * @return string
  */
- 
+
 if (!function_exists('fsn_get_post_meta')) {
 	function fsn_base_get_post_meta($args = false) {
 		global $post;
-		
+
 		$defaults = array(
 			'author' => true,
 			'date' => true,
@@ -175,7 +175,7 @@ if (!function_exists('fsn_get_post_meta')) {
 			'tags' => true,
 		);
 		extract(wp_parse_args($args, $defaults));
-		
+
 		$output = '';
 		$separator = apply_filters('fsn_post_meta_separator', '&bull;');
 		if (!empty($author)) {
@@ -221,6 +221,29 @@ if (!function_exists('fsn_get_post_meta')) {
 		}
 		return $output;
 	}
+}
+
+/**
+ * WP Body Open backwards compatibility
+ *
+ * Add fallback function for wp_body_open action, added in WordPress 5.2.0
+ *
+ * @since 1.4.0
+ *
+ */
+
+if ( ! function_exists( 'wp_body_open' ) ) {
+    /**
+     * Fire the wp_body_open action.
+     *
+     * Added for backwards compatibility to support WordPress versions prior to 5.2.0.
+     */
+    function wp_body_open() {
+        /**
+         * Triggered after the opening <body> tag.
+         */
+        do_action( 'wp_body_open' );
+    }
 }
 
 /**

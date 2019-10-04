@@ -20,4 +20,5 @@
 	    <?php wp_head(); ?>
     </head>
     <body <?php body_class(); ?> data-view="mobile">
+    <?php wp_body_open(); ?>
 	<?php do_action('fsn_base_header_components'); ?>
