@@ -1,8 +1,8 @@
 === Fusion Base ===
 Contributors: Agency Dominion
 Requires at least: WordPress 3.9
-Tested up to: WordPress 4.9.1
-Version: 1.3.1
+Tested up to: WordPress 5.2.3
+Version: 1.4.0
 License: GNU General Public License v2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 Tags: one-column, custom-background, editor-style, featured-images, threaded-comments, translation-ready
@@ -58,6 +58,9 @@ Source: https://github.com/scottjehl/Respond
 Images used in screenshot.png: Photos by Unrestricted Stock (http://unrestrictedstock.com/), licence agreement (http://unrestrictedstock.com/use-agreement/)
 
 == Changelog ==
+
+= 1.4.0 =
+* Add support for wp_body_open action hook.
 
 = 1.1.4 =
 * Initial public release
