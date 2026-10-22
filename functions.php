@@ -28,6 +28,7 @@ function fsn_base_setup() {
 	add_editor_style();
 
 	//define content width
+	global $content_width;
 	if ( ! isset( $content_width ) ) {
 		$content_width = 2560;
 	}
@@ -57,8 +58,8 @@ function fsn_base_script_enqueue() {
 	wp_enqueue_script('jquery');
 	wp_enqueue_style('bootstrap', trailingslashit( get_template_directory_uri() ) .'css/bootstrap.min.css', array(), '3.3.7');
 	wp_enqueue_script('bootstrap', trailingslashit( get_template_directory_uri() ) .'js/vendor/bootstrap.min.js', array('jquery'), '3.3.7', true);
-	wp_enqueue_script( 'modernizr', trailingslashit( get_template_directory_uri() ) .'js/vendor/modernizr-3.3.1-respond-1.4.2.min.js', false, '3.3.1');
-	wp_enqueue_style('fsn_base_styles', get_stylesheet_uri(), array('bootstrap'));
+	wp_enqueue_script( 'modernizr', trailingslashit( get_template_directory_uri() ) .'js/vendor/modernizr-3.3.1-respond-1.4.2.min.js', array(), '3.3.1');
+	wp_enqueue_style('fsn_base_styles', get_stylesheet_uri(), array('bootstrap'), wp_get_theme( get_template() )->get( 'Version' ));
 
 	if ( is_singular() && get_option( 'thread_comments' ) ) {
 		wp_enqueue_script( 'comment-reply' );
@@ -94,9 +95,6 @@ function fsn_base_register_sidebars() {
 //filter form fields
 add_filter( 'comment_form_default_fields', 'fsn_comment_form_default_fields' );
 function fsn_comment_form_default_fields($fields) {
-
-	if ( empty($post_id) )
-		$post_id = get_the_ID();
 
 	$commenter = wp_get_current_commenter();
 	$user = wp_get_current_user();
@@ -135,7 +133,7 @@ function fsn_comment_form_defaults($defaults) {
  */
 
 //pagination **passing a $query_max_pages fixes pagination for custom WP_Query objects
-if (!function_exists('fsn_pagination')) {
+if (!function_exists('fsn_base_pagination')) {
 	function fsn_base_pagination($query_max_pages = false) {
 		global $wp_query;
 		if (!empty($query_max_pages)) {
@@ -164,7 +162,7 @@ if (!function_exists('fsn_pagination')) {
  * @return string
  */
 
-if (!function_exists('fsn_get_post_meta')) {
+if (!function_exists('fsn_base_get_post_meta')) {
 	function fsn_base_get_post_meta($args = false) {
 		global $post;
 
@@ -174,7 +172,11 @@ if (!function_exists('fsn_get_post_meta')) {
 			'categories' => true,
 			'tags' => true,
 		);
-		extract(wp_parse_args($args, $defaults));
+		$args = wp_parse_args($args, $defaults);
+		$author = $args['author'];
+		$date = $args['date'];
+		$categories = $args['categories'];
+		$tags = $args['tags'];
 
 		$output = '';
 		$separator = apply_filters('fsn_post_meta_separator', '&bull;');
@@ -197,7 +199,7 @@ if (!function_exists('fsn_get_post_meta')) {
 				if (!empty($categories_array)) {
 					foreach($categories_array as $category) {
 						$i++;
-						$categories .= '<a href="'. esc_url(get_term_link($category, $taxonomy)) .'">'. $category->name .'</a>';
+						$categories .= '<a href="'. esc_url(get_term_link($category, $taxonomy)) .'">'. esc_html($category->name) .'</a>';
 						$categories .= $i < $numcats ? ', ' : '';
 					}
 					$output .= !empty($author) || !empty($date) ? ' '. $separator .' '. $categories : $categories;
@@ -213,7 +215,7 @@ if (!function_exists('fsn_get_post_meta')) {
 			if (!empty($tags_array)) {
 				foreach($tags_array as $tag) {
 					$i++;
-					$tags .= '<a href="'. esc_url(get_term_link($tag, $taxonomy)) .'">'. $tag->name .'</a>';
+					$tags .= '<a href="'. esc_url(get_tag_link($tag)) .'">'. esc_html($tag->name) .'</a>';
 					$tags .= $i < $numtags ? ', ' : '';
 				}
 				$output .= '<br><span class="post-tags">'. $tags .'</span>';

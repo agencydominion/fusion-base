@@ -1,8 +1,9 @@
 === Fusion Base ===
-Contributors: Agency Dominion
-Requires at least: WordPress 3.9
-Tested up to: WordPress 5.2.3
-Version: 1.4.0
+Contributors: agencydominion
+Requires at least: 3.9
+Tested up to: 7.1
+Requires PHP: 5.6
+Version: 1.5.0
 License: GNU General Public License v2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 Tags: one-column, custom-background, editor-style, featured-images, threaded-comments, translation-ready
@@ -23,7 +24,7 @@ The Fusion Base also adds a Layout page in the admin for building a Master Layou
 == Copyright ==
 
 Fusion Base WordPress Theme.
-Copyright (C) 2016 Agency Dominion
+Copyright (C) 2016-2026 Agency Dominion
 
 This program is free software; you can redistribute it and/or
 modify it under the terms of the GNU General Public License
@@ -41,13 +42,13 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 Fusion Base Theme bundles the following third-party resources:
 
-Bootstrap v3.3.6, Copyright 2011-2015 Twitter, Inc.
+Bootstrap v3.3.7, Copyright 2011-2017 Twitter, Inc.
 Licenses: MIT (https://github.com/twbs/bootstrap/blob/master/LICENSE)
 Source: http://getbootstrap.com
 
 Glyphicons Halflings icon fonts are bundled with Bootstrap (http://glyphicons.com/)
 
-Modernizr 2.8.3 (Custom Build)
+Modernizr 3.3.1 (Custom Build)
 Licenses: MIT
 Source: https://modernizr.com/
 
@@ -58,6 +59,17 @@ Source: https://github.com/scottjehl/Respond
 Images used in screenshot.png: Photos by Unrestricted Stock (http://unrestrictedstock.com/), licence agreement (http://unrestrictedstock.com/use-agreement/)
 
 == Changelog ==
+
+= 1.5.0 =
+* Tested up to WordPress 7.1.
+* Add Requires at least, Tested up to and Requires PHP headers.
+* Fix PHP 8 warnings when the Layout option has not been saved yet or a Component has been deleted.
+* Fix PHP 8 warning for undefined taxonomy when outputting post tags.
+* Fix attachment redirects so parent posts are redirected with a 301 status.
+* Fix the search form screen reader label, which was not being output.
+* Fix function_exists() checks so pagination and post meta functions can be overridden by child themes.
+* Fix $content_width not being set globally.
+* Escape term names in post meta output.
 
 = 1.4.0 =
 * Add support for wp_body_open action hook.

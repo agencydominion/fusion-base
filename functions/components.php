@@ -122,7 +122,7 @@ function fsn_base_layout_options_section() {
 function fsn_base_layout_builder_output() {
 	// get option value from the database
 	$options = get_option( 'fsn_base_layout_options' );
-	$fsn_base_list_items = $options['layout_builder'];
+	$fsn_base_list_items = !empty($options['layout_builder']) ? $options['layout_builder'] : array();
 
 	//drag and drop interface
 	echo '<div id="fsn-base-list-items-sort">';
@@ -136,13 +136,13 @@ function fsn_base_layout_builder_output() {
     				$item_value = 'divider';
     			} else {
 	    			$list_item = get_post(intval($fsn_base_list_item['item_id']));
-	    			$item_class = 'list-item';
-	    			$item_title = $list_item->post_title;
-    				$item_value = $list_item->ID;
     				//ensure component is published
 	    			if (empty($list_item) || $list_item->post_status != 'publish') {
 		    			continue;
 	    			}
+	    			$item_class = 'list-item';
+	    			$item_title = $list_item->post_title;
+    				$item_value = $list_item->ID;
     			}
     			
     			echo '<div class="'. esc_attr($item_class) .'">';					
@@ -187,8 +187,10 @@ function fsn_base_list_builder_add_item() {
 	if ( !current_user_can( 'edit_theme_options' ) )
 		die( '-1' );
 	
-	$list_item_id = intval($_POST['item_id']);
+	$list_item_id = isset($_POST['item_id']) ? intval($_POST['item_id']) : 0;
 	$list_item = get_post($list_item_id);
+	if ( empty($list_item) )
+		die( '-1' );
 	echo '<div class="list-item">';		
 		echo '<div class="list-item-details">';
 			//title
@@ -213,7 +215,7 @@ function fsn_base_output_header_components() {
     }
     if (empty($layout_override)) {
     	$layout_options = get_option('fsn_base_layout_options');
-        $layout_components = $layout_options['layout_builder'];
+        $layout_components = !empty($layout_options['layout_builder']) ? $layout_options['layout_builder'] : array();
         if (!empty($layout_components)) {        	
         	//create header components array        	
         	$header_components = array();	
@@ -250,7 +252,7 @@ function fsn_base_output_footer_components() {
 		echo '</div>';
 		        
         $layout_options = get_option('fsn_base_layout_options');
-        $layout_components = $layout_options['layout_builder'];	        
+        $layout_components = !empty($layout_options['layout_builder']) ? $layout_options['layout_builder'] : array();	        
         if (!empty($layout_components)) {
         	//create footer components array
         	$footer_components = array();
