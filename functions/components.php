@@ -15,6 +15,7 @@ function fsn_base_layout_admin_scripts($hook) {
 	if ($hook == 'appearance_page_fsn_base_layout') {
 		wp_enqueue_script( 'select2' );
 		wp_enqueue_style( 'select2' );
+		wp_enqueue_style('fsn_base_components_admin', get_template_directory_uri() . '/css/fsn-base-components-admin.css');
 		wp_enqueue_script('fsn_base_components_admin', get_template_directory_uri() . '/js/fsn-base-components-admin.js', array( 'jquery','jquery-ui-autocomplete','jquery-ui-sortable'));
 		wp_localize_script( 'fsn_base_components_admin', 'fsnBaseJS', array(
 				'fsnEditLayoutNonce' => wp_create_nonce('fsn-admin-edit-layout'),
@@ -34,7 +35,7 @@ function fsn_base_layout_admin_scripts($hook) {
 function fsn_base_layout_page() {
 	?>
 	<div class="wrap">
-		<h2><?php _e('Layout', 'fusion-base'); ?></h2>
+		<h1><?php esc_html_e('Layout', 'fusion-base'); ?></h1>
 		<?php settings_errors(); ?>
 		<form action="options.php" method="post">
 			<?php settings_fields('fsn_base_layout_options'); ?>
@@ -42,48 +43,6 @@ function fsn_base_layout_page() {
 			<?php submit_button(__('Save Changes', 'fusion-base'), 'primary'); ?>
 		</form>
 	</div>
-	<style>
-		.appearance_page_fsn_base_layout .form-table th	{
-			display:none;	
-		}
-		.appearance_page_fsn_base_layout .form-table td	{
-			padding-left:0;
-			padding-right:0;
-		}
-		#fsn-base-list-items-sort	{
-			margin-bottom:25px;
-		}
-    	#fsn-base-list-items-sort .list-item	{
-			padding:10px;
-    		position:relative;
-    		overflow:hidden;
-    		border:1px solid #ddd;
-    		background:#f0f0f0;
-    		-moz-border-radius:4px;
-    		-webkit-border-radius:4px;
-    		border-radius:4px;
-    		margin-bottom:10px;
-    	}
-		#fsn-base-list-items-sort .list-item p	{
-			margin:10px 0;
-		}
-    	#fsn-base-list-items-sort .list-item.content-item	{
-    		background-color:#d9edf7;
-    		border-color:#bce8f1;
-    		color:#31708f;
-    	}
-    	#fsn-base-list-items-sort .list-item:hover	{
-    		cursor:move;
-    	}       	
-		#fsn-base-list-items-sort .list-item .fsn-base-remove-list-item	{
-			position:absolute;
-			top:5px;
-			right:10px;
-			font-size:10px;
-			text-decoration:none;
-			color:#ff0000;
-		}
-    </style>
 	<?php
 }
 
@@ -92,7 +51,8 @@ add_action('admin_init', 'fsn_base_layout_admin_init');
 function fsn_base_layout_admin_init(){
 	register_setting(
 		'fsn_base_layout_options',
-		'fsn_base_layout_options'
+		'fsn_base_layout_options',
+		'fsn_base_layout_options_sanitize'
 	);
 	//sections	
 	add_settings_section(
@@ -111,9 +71,29 @@ function fsn_base_layout_admin_init(){
 	);	
 }
 
+/* Sanitize the settings */
+function fsn_base_layout_options_sanitize($input) {
+	$output = array(
+		'layout_builder' => array()
+	);
+	if (!empty($input['layout_builder']) && is_array($input['layout_builder'])) {
+		foreach($input['layout_builder'] as $layout_item) {
+			if (!isset($layout_item['item_id'])) {
+				continue;
+			}
+			if ($layout_item['item_id'] === 'divider') {
+				$output['layout_builder'][] = array('item_id' => 'divider');
+			} elseif (absint($layout_item['item_id']) > 0) {
+				$output['layout_builder'][] = array('item_id' => absint($layout_item['item_id']));
+			}
+		}
+	}
+	return $output;
+}
+
 /* Draw the section headers */
 function fsn_base_layout_options_section() {
-	echo '<p>'. __('Choose and place the Components above and below the <strong>Page Content</strong> to control the master layout of the site.', 'fusion-base') .'</p>';
+	echo '<p>'. wp_kses_post(__('Choose and place the Components above and below the <strong>Page Content</strong> to control the master layout of the site.', 'fusion-base')) .'</p>';
 }
 
 /* Display and fill the form fields */
@@ -122,7 +102,7 @@ function fsn_base_layout_options_section() {
 function fsn_base_layout_builder_output() {
 	// get option value from the database
 	$options = get_option( 'fsn_base_layout_options' );
-	$fsn_base_list_items = $options['layout_builder'];
+	$fsn_base_list_items = !empty($options['layout_builder']) ? $options['layout_builder'] : array();
 
 	//drag and drop interface
 	echo '<div id="fsn-base-list-items-sort">';
@@ -136,13 +116,13 @@ function fsn_base_layout_builder_output() {
     				$item_value = 'divider';
     			} else {
 	    			$list_item = get_post(intval($fsn_base_list_item['item_id']));
-	    			$item_class = 'list-item';
-	    			$item_title = $list_item->post_title;
-    				$item_value = $list_item->ID;
     				//ensure component is published
 	    			if (empty($list_item) || $list_item->post_status != 'publish') {
 		    			continue;
 	    			}
+	    			$item_class = 'list-item';
+	    			$item_title = $list_item->post_title;
+    				$item_value = $list_item->ID;
     			}
     			
     			echo '<div class="'. esc_attr($item_class) .'">';					
@@ -150,10 +130,10 @@ function fsn_base_layout_builder_output() {
 						//title
 						echo '<p><strong>'. esc_html($item_title) .'</strong></p>';						
 						//id input
-				    	echo '<input class="list-item-id" type="hidden" name="fsn_base_layout_options[layout_builder]['. $i .'][item_id]" value="'. esc_attr($item_value) .'">';
+				    	echo '<input class="list-item-id" type="hidden" name="fsn_base_layout_options[layout_builder]['. absint($i) .'][item_id]" value="'. esc_attr($item_value) .'">';
 			    	echo '</div>';
 			    	if ($item_value != 'divider') {
-			    		echo '<a href="#" class="fsn-base-remove-list-item">'. __('remove', 'fusion-base') .'</a>';
+			    		echo '<a href="#" class="fsn-base-remove-list-item">'. esc_html__('remove', 'fusion-base') .'</a>';
 			    	}
 				echo '</div>';
 				$i++;
@@ -163,7 +143,7 @@ function fsn_base_layout_builder_output() {
 	    	echo '<div class="list-item content-item">';					
 				echo '<div class="list-item-details">';
 					//title
-					echo '<p><strong>'. __('Page Content', 'fusion-base') .'</strong></p>';
+					echo '<p><strong>'. esc_html__('Page Content', 'fusion-base') .'</strong></p>';
 					//id input
 			    	echo '<input class="list-item-id" type="hidden" name="fsn_base_layout_options[layout_builder][][item_id]" value="divider">';
 		    	echo '</div>';
@@ -172,7 +152,7 @@ function fsn_base_layout_builder_output() {
     echo '</div>';
      
     //item select box
-    echo '<select class="fsn-base-add-list-layout select2-posts-element" name="fsn-base-add-list-layout" data-placeholder="'. __('Choose Component.', 'fusion-base') .'" data-post-type="component" style="width:100%;">';
+    echo '<select class="fsn-base-add-list-layout select2-posts-element" name="fsn-base-add-list-layout" data-placeholder="'. esc_attr__('Choose Component.', 'fusion-base') .'" data-post-type="component" style="width:100%;">';
     	echo '<option></option>';
     echo '</select>';
 }
@@ -187,8 +167,10 @@ function fsn_base_list_builder_add_item() {
 	if ( !current_user_can( 'edit_theme_options' ) )
 		die( '-1' );
 	
-	$list_item_id = intval($_POST['item_id']);
+	$list_item_id = isset($_POST['item_id']) ? intval($_POST['item_id']) : 0;
 	$list_item = get_post($list_item_id);
+	if ( empty($list_item) )
+		die( '-1' );
 	echo '<div class="list-item">';		
 		echo '<div class="list-item-details">';
 			//title
@@ -196,7 +178,7 @@ function fsn_base_list_builder_add_item() {
 			//id input
 	    	echo '<input class="list-item-id" type="hidden" name="fsn_base_layout_options[layout_builder][][item_id]" value="'. esc_attr($list_item->ID) .'">';
     	echo '</div>';
-    	echo '<a href="#" class="fsn-base-remove-list-item">'. __('remove', 'fusion-base') .'</a>';
+    	echo '<a href="#" class="fsn-base-remove-list-item">'. esc_html__('remove', 'fusion-base') .'</a>';
 	echo '</div>';
 	exit;
 }
@@ -213,7 +195,7 @@ function fsn_base_output_header_components() {
     }
     if (empty($layout_override)) {
     	$layout_options = get_option('fsn_base_layout_options');
-        $layout_components = $layout_options['layout_builder'];
+        $layout_components = !empty($layout_options['layout_builder']) ? $layout_options['layout_builder'] : array();
         if (!empty($layout_components)) {        	
         	//create header components array        	
         	$header_components = array();	
@@ -225,6 +207,10 @@ function fsn_base_output_header_components() {
         				'id' => $layout_component['item_id']
         			);
         		}
+        	}
+        	//skip link past header components
+        	if (!empty($header_components)) {
+        		echo '<a class="skip-link screen-reader-text" href="#content-component">'. esc_html__('Skip to content', 'fusion-base') .'</a>';
         	}
         	//output header components
         	fsn_base_output_components($header_components);
@@ -250,7 +236,7 @@ function fsn_base_output_footer_components() {
 		echo '</div>';
 		        
         $layout_options = get_option('fsn_base_layout_options');
-        $layout_components = $layout_options['layout_builder'];	        
+        $layout_components = !empty($layout_options['layout_builder']) ? $layout_options['layout_builder'] : array();	        
         if (!empty($layout_components)) {
         	//create footer components array
         	$footer_components = array();

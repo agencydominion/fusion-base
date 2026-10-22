@@ -27,7 +27,7 @@
 			<?php the_excerpt(); ?>
 			<footer class="post-metadata">
 				<?php echo function_exists('fsn_get_post_meta') ? fsn_get_post_meta() : fsn_base_get_post_meta(); ?>
-				<?php edit_post_link( __( 'edit', 'fusion-base' ), '', '', 0, 'post-edit-link btn btn-default btn-xs'); ?>
+				<?php edit_post_link( esc_html__( 'edit', 'fusion-base' ), '', '', 0, 'post-edit-link btn btn-default btn-xs'); ?>
 			</footer>
 		</div>
 	</div>					
