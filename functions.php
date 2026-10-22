@@ -191,7 +191,7 @@ if (!function_exists('fsn_get_post_meta')) {
 			$taxonomy = apply_filters('fsn_post_meta_taxonomy', 'category', $post_type);
 			if (!empty($taxonomy)) {
 				$categories_array = get_the_terms($post->ID, $taxonomy);
-				$numcats = count($categories_array);
+				$numcats = is_array($categories_array) ? count($categories_array) : 0;
 				$i = 0;
 				$categories = '';
 				if (!empty($categories_array)) {
@@ -207,7 +207,7 @@ if (!function_exists('fsn_get_post_meta')) {
 		if (!empty($tags)) {
 			//tags
 			$tags_array = get_the_tags($post->ID);
-			$numtags = count($tags_array);
+			$numtags = is_array($tags_array) ? count($tags_array) : 0;
 			$i = 0;
 			$tags = '';
 			if (!empty($tags_array)) {
