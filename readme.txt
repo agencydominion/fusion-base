@@ -3,10 +3,12 @@ Contributors: agencydominion
 Requires at least: 3.9
 Tested up to: 7.1
 Requires PHP: 5.6
-Version: 1.5.0
+Version: 1.4.1
 License: GNU General Public License v2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
-Tags: one-column, custom-background, editor-style, featured-images, threaded-comments, translation-ready
+Tags: one-column, custom-background, editor-style, featured-images, sticky-post, threaded-comments, translation-ready
+
+A blank-canvas Bootstrap theme designed to work hand in hand with the Fusion page builder plugin.
 
 == Description ==
 The Fusion Base is a blank-canvas theme that is designed to work hand in hand with the [Fusion](https://wordpress.org/plugins/fusion/) plugin. The post and page templates use the entire browser window for post content output, meaning every aspect of your page is controlled by Fusion. This makes for limitless possibilities when it comes to the look and feel of your site.
@@ -20,6 +22,16 @@ The Fusion Base also adds a Layout page in the admin for building a Master Layou
 3. Click on the 'Activate' button to use your new theme right away.
 4. Download and install the [Fusion](https://wordpress.org/plugins/fusion/) plugin to get the most out of the Fusion Base theme.
 5. Read about using Components in the [Fusion User guide](http://agencydominion.helpscoutdocs.com/article/16-reusable-layout-components)
+
+== Frequently Asked Questions ==
+
+= Does this theme require the Fusion plugin? =
+
+No, but the theme is a blank canvas, so most sites will want [Fusion](https://wordpress.org/plugins/fusion/) to build page layouts. The Layout page under Appearance is only available when Fusion is active.
+
+= Does this theme collect any user data? =
+
+No. Fusion Base does not track users, collect data or load resources from remote servers.
 
 == Copyright ==
 
@@ -40,13 +52,17 @@ You should have received a copy of the GNU General Public License
 along with this program; if not, write to the Free Software
 Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
+== Resources ==
+
 Fusion Base Theme bundles the following third-party resources:
 
 Bootstrap v3.3.7, Copyright 2011-2017 Twitter, Inc.
-Licenses: MIT (https://github.com/twbs/bootstrap/blob/master/LICENSE)
+Licenses: MIT (https://github.com/twbs/bootstrap/blob/v3.3.7/LICENSE)
 Source: http://getbootstrap.com
 
-Glyphicons Halflings icon fonts are bundled with Bootstrap (http://glyphicons.com/)
+Glyphicons Halflings, Copyright Jan Kovarik
+Licenses: MIT, as part of Bootstrap (https://github.com/twbs/bootstrap/blob/v3.3.7/LICENSE)
+Source: http://glyphicons.com/
 
 Modernizr 3.3.1 (Custom Build)
 Licenses: MIT
@@ -60,9 +76,13 @@ Images used in screenshot.png: Photos by Unrestricted Stock (http://unrestricted
 
 == Changelog ==
 
-= 1.5.0 =
+= 1.4.1 =
 * Tested up to WordPress 7.1.
 * Add Requires at least, Tested up to and Requires PHP headers.
+* Add a skip link when header Components are output before the page content.
+* Sanitize the Layout option before it is saved.
+* Escape translated strings and post data on output.
+* Move Layout page admin styles into an enqueued stylesheet.
 * Fix PHP 8 warnings when the Layout option has not been saved yet or a Component has been deleted.
 * Fix PHP 8 warning for undefined taxonomy when outputting post tags.
 * Fix attachment redirects so parent posts are redirected with a 301 status.
@@ -70,9 +90,16 @@ Images used in screenshot.png: Photos by Unrestricted Stock (http://unrestricted
 * Fix function_exists() checks so pagination and post meta functions can be overridden by child themes.
 * Fix $content_width not being set globally.
 * Escape term names in post meta output.
+* Prefix comment form filter functions with fsn_base_.
+* Update Theme URI to point to the theme's GitHub repository.
 
 = 1.4.0 =
 * Add support for wp_body_open action hook.
 
 = 1.1.4 =
 * Initial public release
+
+== Upgrade Notice ==
+
+= 1.4.1 =
+Compatibility and security fixes for current versions of WordPress and PHP 8.

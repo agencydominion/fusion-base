@@ -1,0 +1,51 @@
+/**
+ * WP Admin styles for Fusion Components List builder
+ */
+
+.appearance_page_fsn_base_layout .form-table th {
+	display:none;
+}
+
+.appearance_page_fsn_base_layout .form-table td {
+	padding-left:0;
+	padding-right:0;
+}
+
+#fsn-base-list-items-sort {
+	margin-bottom:25px;
+}
+
+#fsn-base-list-items-sort .list-item {
+	padding:10px;
+	position:relative;
+	overflow:hidden;
+	border:1px solid #ddd;
+	background:#f0f0f0;
+	-moz-border-radius:4px;
+	-webkit-border-radius:4px;
+	border-radius:4px;
+	margin-bottom:10px;
+}
+
+#fsn-base-list-items-sort .list-item p {
+	margin:10px 0;
+}
+
+#fsn-base-list-items-sort .list-item.content-item {
+	background-color:#d9edf7;
+	border-color:#bce8f1;
+	color:#31708f;
+}
+
+#fsn-base-list-items-sort .list-item:hover {
+	cursor:move;
+}
+
+#fsn-base-list-items-sort .list-item .fsn-base-remove-list-item {
+	position:absolute;
+	top:5px;
+	right:10px;
+	font-size:10px;
+	text-decoration:none;
+	color:#ff0000;
+}

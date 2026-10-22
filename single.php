@@ -11,8 +11,8 @@
 		<?php endwhile; ?>				
 		<?php else: ?>
 		<div class="col-sm-12">
-			<h2><?php _e('Post Not Found', 'fusion-base') ;?></h2>
-			<p><?php _e('Sorry, there\'s nothing here.', 'fusion-base'); ?></p>
+			<h2><?php esc_html_e('Post Not Found', 'fusion-base') ;?></h2>
+			<p><?php esc_html_e('Sorry, there\'s nothing here.', 'fusion-base'); ?></p>
 		</div>
 		<?php endif; ?>				
 		<?php get_footer(); ?>
