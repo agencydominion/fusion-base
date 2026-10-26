@@ -68,6 +68,30 @@ function fsn_base_script_enqueue() {
 }
 
 /**
+ * No block CSS on pages that have no blocks (filter fsn_perf_dequeue_block_styles, default off)
+ *
+ * Core prints wp-block-library, the global-styles inline CSS and classic-theme-styles on every page of this classic
+ * theme. They are kept where blocks can appear: a singular page whose content has blocks, or a blog with block widgets.
+ * Since WordPress 6.9 a classic theme's global styles are enqueued at wp_footer (priority 1) and hoisted into the head
+ * in place of wp-global-styles-placeholder, so the dequeue runs again there, before the footer styles print.
+ */
+
+add_action( 'wp_enqueue_scripts', 'fsn_base_perf_dequeue_block_styles', 100 );
+add_action( 'wp_footer', 'fsn_base_perf_dequeue_block_styles', 2 );
+
+function fsn_base_perf_dequeue_block_styles() {
+	if ( ! apply_filters( 'fsn_perf_dequeue_block_styles', false ) ) {
+		return;
+	}
+	if ( ( is_singular() && has_blocks( get_queried_object_id() ) ) || is_active_widget( false, false, 'block' ) ) {
+		return;
+	}
+	foreach ( array( 'wp-block-library', 'wp-block-library-theme', 'global-styles', 'wp-global-styles-placeholder', 'classic-theme-styles' ) as $handle ) {
+		wp_dequeue_style( $handle );
+	}
+}
+
+/**
  * Sidebars
  */
 
