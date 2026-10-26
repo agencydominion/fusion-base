@@ -55,13 +55,39 @@ add_action( 'wp_enqueue_scripts', 'fsn_base_script_enqueue' );
 function fsn_base_script_enqueue() {
 	//enqueue scripts and styles
 	wp_enqueue_script('jquery');
-	wp_enqueue_style('bootstrap', trailingslashit( get_template_directory_uri() ) .'css/bootstrap.min.css', array(), '3.3.7');
+	//fsn_perf_slim_bootstrap (default off): css/bootstrap-slim.min.css is this file without the components no site uses (see its header)
+	$bootstrap_css = apply_filters('fsn_perf_slim_bootstrap', false) ? 'css/bootstrap-slim.min.css' : 'css/bootstrap.min.css';
+	wp_enqueue_style('bootstrap', trailingslashit( get_template_directory_uri() ) . $bootstrap_css, array(), '3.3.7');
 	wp_enqueue_script('bootstrap', trailingslashit( get_template_directory_uri() ) .'js/vendor/bootstrap.min.js', array('jquery'), '3.3.7', true);
 	wp_enqueue_script( 'modernizr', trailingslashit( get_template_directory_uri() ) .'js/vendor/modernizr-3.3.1-respond-1.4.2.min.js', false, '3.3.1');
 	wp_enqueue_style('fsn_base_styles', get_stylesheet_uri(), array('bootstrap'));
 
 	if ( is_singular() && get_option( 'thread_comments' ) ) {
 		wp_enqueue_script( 'comment-reply' );
+	}
+}
+
+/**
+ * No block CSS on pages that have no blocks (filter fsn_perf_dequeue_block_styles, default off)
+ *
+ * Core prints wp-block-library, the global-styles inline CSS and classic-theme-styles on every page of this classic
+ * theme. They are kept where blocks can appear: a singular page whose content has blocks, or a blog with block widgets.
+ * Since WordPress 6.9 a classic theme's global styles are enqueued at wp_footer (priority 1) and hoisted into the head
+ * in place of wp-global-styles-placeholder, so the dequeue runs again there, before the footer styles print.
+ */
+
+add_action( 'wp_enqueue_scripts', 'fsn_base_perf_dequeue_block_styles', 100 );
+add_action( 'wp_footer', 'fsn_base_perf_dequeue_block_styles', 2 );
+
+function fsn_base_perf_dequeue_block_styles() {
+	if ( ! apply_filters( 'fsn_perf_dequeue_block_styles', false ) ) {
+		return;
+	}
+	if ( ( is_singular() && has_blocks( get_queried_object_id() ) ) || is_active_widget( false, false, 'block' ) ) {
+		return;
+	}
+	foreach ( array( 'wp-block-library', 'wp-block-library-theme', 'global-styles', 'wp-global-styles-placeholder', 'classic-theme-styles' ) as $handle ) {
+		wp_dequeue_style( $handle );
 	}
 }
 
