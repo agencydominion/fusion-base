@@ -1,4 +1,6 @@
 <?php
+defined( 'ABSPATH' ) || exit;
+
 header("HTTP/1.1 301 Moved Permanently");
 header("Location: ".esc_url(home_url()));
 exit();

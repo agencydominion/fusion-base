@@ -1,3 +1,4 @@
+<?php defined( 'ABSPATH' ) || exit; ?>
 <form role="search" method="get" class="search-form form-inline" action="<?php echo esc_url(home_url( '/' )); ?>">
 	<div class="form-group">
 		<span class="screen-reader-text"><?php __( 'Search for:', 'fusion-base' ); ?>'</span>
