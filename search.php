@@ -1,3 +1,4 @@
+<?php defined( 'ABSPATH' ) || exit; ?>
 <?php get_header(); ?>
 	<?php get_template_part( 'template-parts/search/site', 'search-results' ); ?>
 		<div id="fsn-base-blogroll" class="container">
