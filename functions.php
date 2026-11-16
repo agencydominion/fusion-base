@@ -93,6 +93,41 @@ function fsn_base_perf_dequeue_block_styles() {
 }
 
 /**
+ * Missing pages (setting off by default)
+ *
+ * 404.php redirects a missing URL to the home page with a 301. Appearance > Customize > Missing Pages has a checkbox
+ * that shows a "Page Not Found" page with a real 404 status instead. The filter fsn_base_404_page overrides the
+ * checkbox: return true or false.
+ */
+
+add_action( 'customize_register', 'fsn_base_customize_missing_pages' );
+
+function fsn_base_customize_missing_pages( $wp_customize ) {
+	$wp_customize->add_section( 'fsn_base_missing_pages', array(
+		'title'    => __( 'Missing Pages', 'fusion-base' ),
+		'priority' => 160,
+	) );
+	$wp_customize->add_setting( 'fsn_base_404_page', array(
+		'default'           => false,
+		'sanitize_callback' => 'fsn_base_sanitize_checkbox',
+	) );
+	$wp_customize->add_control( 'fsn_base_404_page', array(
+		'type'        => 'checkbox',
+		'section'     => 'fsn_base_missing_pages',
+		'label'       => __( 'Show a "Page Not Found" page', 'fusion-base' ),
+		'description' => __( 'A link to a page that doesn\'t exist shows a "Page Not Found" page and tells search engines the page is missing (404). Unchecked, visitors are redirected to the home page.', 'fusion-base' ),
+	) );
+}
+
+function fsn_base_sanitize_checkbox( $checked ) {
+	return ! empty( $checked );
+}
+
+function fsn_base_404_page_enabled() {
+	return (bool) apply_filters( 'fsn_base_404_page', (bool) get_theme_mod( 'fsn_base_404_page', false ) );
+}
+
+/**
  * Sidebars
  */
 
