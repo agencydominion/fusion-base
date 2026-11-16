@@ -97,7 +97,9 @@ function fsn_base_perf_dequeue_block_styles() {
  *
  * 404.php redirects a missing URL to the home page with a 301. Appearance > Customize > Missing Pages has a checkbox
  * that shows a "Page Not Found" page with a real 404 status instead. The filter fsn_base_404_page overrides the
- * checkbox: return true or false.
+ * checkbox: return true or false. The page shown is the content of the page chosen under "Page to show" (built like
+ * any other page, so it fits the site's header; best kept Private so it has no address of its own), or a short
+ * built-in message when none is chosen. The filter fsn_base_404_page_id overrides the choice.
  */
 
 add_action( 'customize_register', 'fsn_base_customize_missing_pages' );
@@ -117,6 +119,21 @@ function fsn_base_customize_missing_pages( $wp_customize ) {
 		'label'       => __( 'Show a "Page Not Found" page', 'fusion-base' ),
 		'description' => __( 'A link to a page that doesn\'t exist shows a "Page Not Found" page and tells search engines the page is missing (404). Unchecked, visitors are redirected to the home page.', 'fusion-base' ),
 	) );
+	$choices = array( 0 => __( '— Built-in message —', 'fusion-base' ) );
+	foreach ( get_pages( array( 'post_status' => 'publish,private' ) ) as $page ) {
+		$choices[ $page->ID ] = $page->post_title . ( 'private' === $page->post_status ? ' (' . __( 'Private', 'fusion-base' ) . ')' : '' );
+	}
+	$wp_customize->add_setting( 'fsn_base_404_page_id', array(
+		'default'           => 0,
+		'sanitize_callback' => 'absint',
+	) );
+	$wp_customize->add_control( 'fsn_base_404_page_id', array(
+		'type'        => 'select',
+		'section'     => 'fsn_base_missing_pages',
+		'label'       => __( 'Page to show', 'fusion-base' ),
+		'description' => __( 'Build the "Page Not Found" page like any other page and choose it here. Keep it Private so it has no address of its own.', 'fusion-base' ),
+		'choices'     => $choices,
+	) );
 }
 
 function fsn_base_sanitize_checkbox( $checked ) {
@@ -125,6 +142,15 @@ function fsn_base_sanitize_checkbox( $checked ) {
 
 function fsn_base_404_page_enabled() {
 	return (bool) apply_filters( 'fsn_base_404_page', (bool) get_theme_mod( 'fsn_base_404_page', false ) );
+}
+
+function fsn_base_404_page_post() {
+	$page_id = absint( apply_filters( 'fsn_base_404_page_id', absint( get_theme_mod( 'fsn_base_404_page_id', 0 ) ) ) );
+	$page    = $page_id ? get_post( $page_id ) : null;
+	if ( ! $page || 'page' !== $page->post_type || ! in_array( $page->post_status, array( 'publish', 'private' ), true ) ) {
+		return null;
+	}
+	return $page;
 }
 
 /**
